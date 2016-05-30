@@ -123,7 +123,41 @@ var GanttView = View.extend({
       navigate: "scroll",
       minScale: "days",
       maxScale: "months",
-      itemsPerPage: 100
+      itemsPerPage: 100,
+//      onItemClick: function(data) {
+//    	  alert("Item clicked - show some details");
+//    	  },
+//      onAddClick: function(dt, rowId) {
+//    	  alert("Empty space clicked - add an item!");
+//  	  },
+  	  onRender: function() {
+  		$('.bar').draggable({
+  		    axis:'x',
+  		    start: function(event, ui) {
+  		        $(this).data("startx",$(this).offset().left);
+  		    },
+  		    stop: function(event, ui) {
+  		        var change = $(this).offset().left - $(this).data("startx");
+  		        var value = $(this).css('margin-left');
+  		        value = value.split("px");
+  		        value = parseInt(value[0]) + change;
+  		        $(this).css('margin-left', value);
+  		        $(this).css('left', '');
+  		    }
+  		});
+  		$(".bar").resizable({ handles: 'e, w' });
+  		
+  		var resizeId;
+  		$('.bar').resize(function() {
+  			clearTimeout(resizeId);
+  		    resizeId = setTimeout(doneResizing, 500);
+  		});
+  		
+  		function doneResizing(){
+  			// Resizing done, whatever we want to do here
+  			alert("Item resized - show some details");
+  		}
+  	  }
     });
 
     this.data = false;//reset
